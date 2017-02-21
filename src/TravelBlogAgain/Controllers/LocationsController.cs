@@ -16,7 +16,7 @@ namespace TravelBlogAgain.Controllers
         private TravelBlogAgainContext db = new TravelBlogAgainContext();
         public IActionResult Index()
         {
-            ViewBag.Suggestions = db.Suggestions.ToList();
+            ViewBag.Suggestions = GetOrderedSuggestions();
             return View(db.Locations
                 .Include(locations => locations.Experiences)
                 .ToList());
@@ -58,6 +58,11 @@ namespace TravelBlogAgain.Controllers
             db.Locations.Remove(thisLocation);
             db.SaveChanges();
             return RedirectToAction("Index");
+        }
+
+        public IActionResult GetOrderedSuggestions()
+        {
+            return Json(db.Suggestions.OrderByDescending(s => s.Upvotes).ToList());
         }
     }
 }

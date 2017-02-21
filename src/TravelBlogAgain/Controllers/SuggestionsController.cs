@@ -84,5 +84,14 @@ namespace TravelBlogAgain.Controllers
             return thisSuggestion.Upvotes;
         }
 
+        [HttpPost]
+        public int AddDownvote(int id)
+        {
+            Suggestion thisSuggestion = suggestionRepo.Suggestions.FirstOrDefault(x => x.Id == id);
+            thisSuggestion.Upvotes = thisSuggestion.Upvotes - 1;
+            suggestionRepo.Edit(thisSuggestion);
+            return thisSuggestion.Upvotes;
+        }
+
     }
 }

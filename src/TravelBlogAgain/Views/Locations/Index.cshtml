@@ -26,16 +26,9 @@
     </div>
     <div class="col-sm-4">
         <h3>Places I should go:</h3>
-        @foreach (var suggestion in ViewBag.Suggestions)
-        {
-            <h4>@suggestion.Name</h4>
-            <input type="submit" id="@suggestion.Id" class="add-upvote btn" value="Upvote!" />
-            <h6>Upvotes: 
-                <span id='@("result" + suggestion.Id)'>
-                    @suggestion.Upvotes
-                </span>
-           </h6>
-        }
+        <div id="suggestionList">
+            
+        </div>
         <h5>@Html.ActionLink("Make a Suggestion", "Create", "Suggestions")</h5>
     </div>
 </div>
@@ -43,19 +36,65 @@
 
 <script type="text/javascript">
     $(document).ready(function () {
-        $('.add-upvote').click(function (event) {
-            var clickedId = $(this).attr('id');
-            event.preventDefault();
-            console.log("oh, hi");
+
+        function AjaxSuggestionList() {
             $.ajax({
-                url: '@Url.Action("AddUpvote", "Suggestions")',
-                type: 'POST',
-                //dataType: 'json',
-                data: { id: clickedId },
+                url: '@Url.Action("GetOrderedSuggestions")',
+                type: 'GET',
+                dataType: 'json',
                 success: function (result) {
-                    $('#result' + clickedId).text(result);
+                    var finalHtml = "";
+                    for (var i = 0; i < result.length; i++) {
+                        finalHtml +=
+                      "<h4>" + result[i].name + "</h4>" +
+                      "<input type='submit' id=" + result[i].id + " class='add-upvote btn' value='↑' />" +
+                      "<input type='submit' id=" + result[i].id + " class='add-downvote btn' value='↓' />" +
+                      "<h6>Upvotes:<span id='result" + result[i].id + "'>" + result[i].upvotes + "</span></h6>";
+                    }
+                     console.log(result);
+                    console.log(finalHtml);
+                    $('#suggestionList').html(finalHtml);
                 }
             });
-        });
+        }
+
+        AjaxSuggestionList();
+
+
+        setTimeout(function () {
+            $('.add-upvote').click(function (event) {
+                var clickedId = $(this).attr('id');
+                event.preventDefault();
+                console.log("oh, hi");
+                $.ajax({
+                    url: '@Url.Action("AddUpvote", "Suggestions")',
+                    type: 'POST',
+                    //dataType: 'json',
+                    data: { id: clickedId },
+                    success: function (result) {
+                        $('#result' + clickedId).text(result);
+                    }
+                });
+            });
+
+            $('.add-downvote').click(function (event) {
+                var clickedId = $(this).attr('id');
+                event.preventDefault();
+                console.log("oh, hi");
+                $.ajax({
+                    url: '@Url.Action("AddDownvote", "Suggestions")',
+                    type: 'POST',
+                    //dataType: 'json',
+                    data: { id: clickedId },
+                    success: function (result) {
+                        $('#result' + clickedId).text(result);
+                    }
+                });
+            });
+
+        }, 500);
+
+
+
     });
 </script>
