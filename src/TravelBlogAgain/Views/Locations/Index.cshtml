@@ -29,10 +29,33 @@
         @foreach (var suggestion in ViewBag.Suggestions)
         {
             <h4>@suggestion.Name</h4>
-            <h6>Upvotes: @suggestion.Upvotes</h6>
+            <input type="submit" id="@suggestion.Id" class="add-upvote btn" value="Upvote!" />
+            <h6>Upvotes: 
+                <span id='@("result" + suggestion.Id)'>
+                    @suggestion.Upvotes
+                </span>
+           </h6>
         }
         <h5>@Html.ActionLink("Make a Suggestion", "Create", "Suggestions")</h5>
     </div>
 </div>
 
 
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('.add-upvote').click(function (event) {
+            var clickedId = $(this).attr('id');
+            event.preventDefault();
+            console.log("oh, hi");
+            $.ajax({
+                url: '@Url.Action("AddUpvote", "Suggestions")',
+                type: 'POST',
+                //dataType: 'json',
+                data: { id: clickedId },
+                success: function (result) {
+                    $('#result' + clickedId).text(result);
+                }
+            });
+        });
+    });
+</script>
