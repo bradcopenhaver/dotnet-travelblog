@@ -16,6 +16,7 @@ namespace TravelBlogAgain.Controllers
         private TravelBlogAgainContext db = new TravelBlogAgainContext();
         public IActionResult Index()
         {
+            ViewBag.Suggestions = db.Suggestions.ToList();
             return View(db.Locations
                 .Include(locations => locations.Experiences)
                 .ToList());

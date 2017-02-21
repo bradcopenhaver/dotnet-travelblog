@@ -7,17 +7,32 @@
 
 <h2>Welcome to Indy's Travel Blog</h2>
 
-@foreach ( var location in Model)
-{
-    <h3>@Html.DisplayFor(locationItem => location.Name)</h3>
-    <h6>@Html.ActionLink("Edit Location", "Edit", new { id = location.LocationId}) | @Html.ActionLink("Delete Location", "Delete", new { id = location.LocationId })</h6>
-    @foreach (var experience in location.Experiences)
-    {
-        <h4>@Html.ActionLink(experience.Activity, "Details", "Experiences", new { id = experience.ExpId })</h4>
+<div class="row">
+    <div class="col-sm-8">
+        <h3>Places I've been:</h3>
+        @foreach ( var location in Model)
+        {
+            <h4>@Html.DisplayFor(locationItem => location.Name)</h4>
+            <h6>@Html.ActionLink("Edit Location", "Edit", new { id = location.LocationId}) | @Html.ActionLink("Delete Location", "Delete", new { id = location.LocationId })</h6>
+            @foreach (var experience in location.Experiences)
+            {
+                <h5>@Html.ActionLink(experience.Activity, "Details", "Experiences", new { id = experience.ExpId })</h5>
 
-    }
+            }
 
-}
+        }
+        @Html.ActionLink("Create New Location", "Create") |
+        @Html.ActionLink("Create New Experience", "Create", "Experiences")
+    </div>
+    <div class="col-sm-4">
+        <h3>Places I should go:</h3>
+        @foreach (var suggestion in ViewBag.Suggestions)
+        {
+            <h4>@suggestion.Name</h4>
+            <h6>Upvotes: @suggestion.Upvotes</h6>
+        }
+        <h5>@Html.ActionLink("Make a Suggestion", "Create", "Suggestions")</h5>
+    </div>
+</div>
 
-@Html.ActionLink("Create New Location", "Create") |
-@Html.ActionLink("Create New Experience", "Create", "Experiences")
+
