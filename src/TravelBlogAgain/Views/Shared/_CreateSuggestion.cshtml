@@ -1,0 +1,71 @@
+﻿<h2>Suggest a Destination</h2>
+
+
+    <div class="form-group">
+        <label for="Name">Name:</label>
+        <input id="name" name="Name" class="form-control" />
+    </div>
+    <div class="form-group">
+        <label for="Description">Details:</label>
+        <input id="description" name="Description" class="form-control" />
+    </div>
+
+    <input type="button" class="NewSugg btn" value="Suggest"/>
+
+
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $(".NewSugg").click(function (event) {
+            console.log("Sugggggg it");
+            name = $('#name').val();
+            description = $('#description').val();
+            $.ajax({
+                url: '@Url.Action("Create", "Suggestions")',
+                type: 'POST',
+                dataType: 'json',
+                data: {Name: name, Description: description },
+                success: function (result) {
+                    var result1 = result;
+                    var finalHtml =
+                      "<h4>" + result.name + "</h4>" +
+                      "<input type='submit' id=" + result.id + " class='add-upvote btn' value='↑' />" +
+                      "<input type='submit' id=" + result.id + " class='add-downvote btn' value='↓' />" +
+                      "<h6>Upvotes:<span id='result" + result.id + "'>" + result.upvotes + "</span></h6>";
+
+                    $('#suggestionList').append(finalHtml);
+                    $('.add-upvote').on("click", function (event) {
+                        event.preventDefault();
+                        console.log("oh, hi");
+                        $.ajax({
+                            url: '@Url.Action("AddUpvote", "Suggestions")',
+                            type: 'POST',
+                            //dataType: 'json',
+                            data: { id: result.id },
+                            success: function (result) {
+                                console.log(result);
+                                $('#result' + result1.id).text(result);
+                            }
+                        });
+                    });
+
+                    $('.add-downvote').on("click", function (event) {
+                        event.preventDefault();
+                        console.log("oh, hi");
+                        $.ajax({
+                            url: '@Url.Action("AddDownvote", "Suggestions")',
+                            type: 'POST',
+                            //dataType: 'json',
+                            data: { id: result.id },
+                            success: function (result) {
+                                $('#result' + result1.id).text(result);
+                            }
+                        });
+                    });
+
+                }
+            });
+
+       });
+   });
+</script>

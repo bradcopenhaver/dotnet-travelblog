@@ -5,8 +5,6 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>Welcome to Indy's Travel Blog</h2>
-
 <div class="row">
     <div class="col-sm-8">
         <h3>Places I've been:</h3>
@@ -29,7 +27,7 @@
         <div id="suggestionList">
             
         </div>
-        <h5>@Html.ActionLink("Make a Suggestion", "Create", "Suggestions")</h5>
+        @Html.Partial("_CreateSuggestion")
     </div>
 </div>
 

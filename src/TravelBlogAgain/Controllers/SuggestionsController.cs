@@ -43,10 +43,11 @@ namespace TravelBlogAgain.Controllers
         }
 
         [HttpPost]
-        public IActionResult Create(Suggestion suggestion)
+        public IActionResult Create(string Name, string Description)
         {
-            suggestionRepo.Save(suggestion);
-            return RedirectToAction("Index", "Locations");
+            Suggestion newSugg = new Models.Suggestion(Name, Description);
+            suggestionRepo.Save(newSugg);
+            return Json(newSugg);
         }
 
         public IActionResult Edit(int id)
