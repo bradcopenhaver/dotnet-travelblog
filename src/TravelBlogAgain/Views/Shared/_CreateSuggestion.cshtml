@@ -34,7 +34,7 @@
                       "<h6>Upvotes:<span id='result" + result.id + "'>" + result.upvotes + "</span></h6>";
 
                     $('#suggestionList').append(finalHtml);
-                    $('.add-upvote').on("click", function (event) {
+                    $('.add-upvote').last().on("click", function (event) {
                         event.preventDefault();
                         console.log("oh, hi");
                         $.ajax({
@@ -49,7 +49,7 @@
                         });
                     });
 
-                    $('.add-downvote').on("click", function (event) {
+                    $('.add-downvote').last().on("click", function (event) {
                         event.preventDefault();
                         console.log("oh, hi");
                         $.ajax({
